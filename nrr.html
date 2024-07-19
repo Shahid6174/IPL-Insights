@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NRR Calculator</title>
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playwrite+AU+QLD:wght@100..400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="nrr.css" />
+  </head>
+  <body style="display: flex; justify-content: center">
+    <div style="width: 50%; height: auto">
+      <div
+        class="container mt-5 px-5"
+        style="
+          background-color: rgba(0, 0, 0, 0.418);
+          padding: 20px;
+          border-radius: 8px;
+        "
+      >
+        <h2 class="text-center">Net Run Rate (NRR) Calculator</h2>
+        <div class="form-group mt-4">
+          <label for="fInngRuns">First Innings Runs:</label>
+          <input
+            type="number"
+            class="form-control"
+            id="fInngRuns"
+            placeholder="Enter First Innings Runs"
+          />
+        </div>
+        <div class="form-group">
+          <label for="fInngOvers">First Innings Overs:</label>
+          <input
+            type="number"
+            class="form-control"
+            id="fInngOvers"
+            placeholder="Enter First Innings Overs"
+          />
+        </div>
+        <div class="form-group">
+          <label for="sInngRuns">Second Innings Runs:</label>
+          <input
+            type="number"
+            class="form-control"
+            id="sInngRuns"
+            placeholder="Enter Second Innings Runs"
+          />
+        </div>
+        <div class="form-group">
+          <label for="sInngOvers">Second Innings Overs:</label>
+          <input
+            type="number"
+            class="form-control"
+            id="sInngOvers"
+            placeholder="Enter Second Innings Overs"
+          />
+        </div>
+        <div class="form-group">
+          <label for="nrrTBF">NRR Result:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="nrrTBF"
+            readonly
+            placeholder="NRR Result"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="return">
+      <a href="index.html"><h1>Home</h1></a>
+    </div>
+    <script src="nrr.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>
