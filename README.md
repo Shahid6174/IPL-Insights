@@ -1,4 +1,5 @@
-CricStat
+**CricStat**
+
 CricStat is a web-based application that provides statistical tools and calculations for cricket matches. This project includes various features such as Duckworth-Lewis-Stern (DLS) calculations, Net Run Rate (NRR) calculations, and more.
 
 Features
