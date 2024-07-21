@@ -38,7 +38,7 @@
 
 .card1-side.back {
   transform: rotateY(-180deg);
-  background-image: url(/images/dls.png);
+  background-image: url(images/dls.png);
   background-size: contain;
 }
 
@@ -88,7 +88,7 @@
 
 .card2-side.back {
   transform: rotateY(-180deg);
-  background-image: url(/images/nrr.png);
+  background-image: url(images/nrr.png);
   background-size: cover;
 }
 
@@ -133,7 +133,7 @@
 
 .card3-side.back {
   transform: rotateY(-180deg);
-  background-image: url(/images/bowl.png);
+  background-image: url(images/bowl.png);
   background-size: cover;
 }
 
