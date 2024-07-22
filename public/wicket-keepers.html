@@ -104,15 +104,12 @@
         <table id="wicketkeepersTable" class="table table-bordered mt-4">
             <thead>
                 <tr>
-                    <th>Select</th> <!-- New column for checkboxes -->
+                    <th>Select</th> <!-- Checkbox column header -->
                     <th>Player</th>
-                    <th>Teams</th>
-                    <th>Span</th>
-                    <th>Mat</th>
+                    <th>Matches</th>
                     <th>Inns</th>
-                    <th>Dis</th>
-                    <th>Ct</th>
-                    <th>St</th>
+                    <th>Catches</th>
+                    <th>Stumpings</th>
                     <th>Max Dis Inns</th>
                     <th>Dis/Inn</th>
                 </tr>
@@ -138,20 +135,17 @@
                 // Populate the table
                 tableBody.innerHTML = data.map(wicketkeeper => `
                     <tr>
-                        <td><input type="checkbox" class="wicketkeeper-checkbox" /></td> <!-- Checkbox column -->
-                        <td>${wicketkeeper.Player}</td>
-                        <td>${wicketkeeper.Teams}</td>
-                        <td>${wicketkeeper.Span}</td>
-                        <td>${wicketkeeper.Mat}</td>
-                        <td>${wicketkeeper.Inns}</td>
-                        <td>${wicketkeeper.Dis}</td>
-                        <td>${wicketkeeper.Ct}</td>
-                        <td>${wicketkeeper.St}</td>
-                        <td>${wicketkeeper['Max Dis Inns']}</td>
-                        <td>${wicketkeeper['Dis/Inn']}</td>
+                        <td><input type="checkbox" class="wicketkeeper-checkbox" /></td> <!-- Checkbox -->
+                        <td>${wicketkeeper.Player || 'N/A'}</td>
+                        <td>${wicketkeeper.Mat || 'N/A'}</td> <!-- Matches -->
+                        <td>${wicketkeeper.Inns || 'N/A'}</td> <!-- Inns -->
+                        <td>${wicketkeeper.Ct || 'N/A'}</td> <!-- Catches -->
+                        <td>${wicketkeeper.St || 'N/A'}</td> <!-- Stumpings -->
+                        <td>${wicketkeeper['Max Dis Inns'] || 'N/A'}</td> <!-- Max Dis Inns -->
+                        <td>${wicketkeeper['Dis/Inn'] || 'N/A'}</td> <!-- Dis/Inn -->
                     </tr>
                 `).join('');
-                
+
                 // Add event listener for checkboxes
                 addCheckboxListeners();
             } catch (error) {
@@ -161,22 +155,56 @@
 
         function addCheckboxListeners() {
             const checkboxes = document.querySelectorAll('.wicketkeeper-checkbox');
+            let selectedCount = 0;
+
             checkboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', () => {
-                    // Uncheck all checkboxes if this one is checked
                     if (checkbox.checked) {
-                        checkboxes.forEach(cb => {
-                            if (cb !== checkbox) cb.checked = false;
-                        });
+                        selectedCount++;
+                        if (selectedCount > 2) {
+                            checkbox.checked = false; // Uncheck the checkbox
+                            alert('You can select a maximum of 2 wicketkeepers.');
+                        }
+                    } else {
+                        selectedCount--;
                     }
                 });
             });
+        }
+
+        function validateSelection() {
+            const checkboxes = document.querySelectorAll('.wicketkeeper-checkbox:checked');
+            if (checkboxes.length < 2) {
+                alert('Please select at least 2 wicketkeepers.');
+                return false;
+            }
+            return true;
         }
 
         // Show loading indicator and fetch data on button click
         document.getElementById('fetchWicketkeepers').addEventListener('click', () => {
             document.getElementById('loading').style.display = 'block';
             fetchWicketkeepers();
+        });
+
+        // Save selected wicketkeepers to localStorage
+        document.getElementById('saveButton').addEventListener('click', () => {
+            if (validateSelection()) {
+                const selectedWicketkeepers = Array.from(document.querySelectorAll('.wicketkeeper-checkbox:checked')).map(checkbox => {
+                    const row = checkbox.closest('tr');
+                    return {
+                        Player: row.cells[1].textContent,
+                        Mat: row.cells[2].textContent,
+                        Inns: row.cells[3].textContent,
+                        Ct: row.cells[4].textContent,
+                        St: row.cells[5].textContent,
+                        'Max Dis Inns': row.cells[6].textContent,
+                        'Dis/Inn': row.cells[7].textContent
+                    };
+                });
+                localStorage.setItem('selectedWicketkeepers', JSON.stringify(selectedWicketkeepers));
+                alert('Wicketkeepers saved!');
+            }
         });
     </script>
 </body>

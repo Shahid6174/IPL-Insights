@@ -195,11 +195,27 @@
             fetchBowlers();
         });
 
-        // Validate selection on save button click
+        // Save selected bowlers to localStorage
         document.getElementById('saveButton').addEventListener('click', () => {
             if (validateSelection()) {
-                // Add save logic here
-                alert('Selection is valid. Save your data.');
+                const selectedBowlers = Array.from(document.querySelectorAll('.bowler-checkbox:checked')).map(checkbox => {
+                    const row = checkbox.closest('tr');
+                    return {
+                        Player: row.cells[1].textContent,
+                        Overs: row.cells[2].textContent,
+                        Mdns: row.cells[3].textContent,
+                        Runs: row.cells[4].textContent,
+                        Wkts: row.cells[5].textContent,
+                        Econ: row.cells[6].textContent,
+                        Team: row.cells[7].textContent,
+                        Opposition: row.cells[8].textContent,
+                        Ground: row.cells[9].textContent,
+                        'Match Date': row.cells[10].textContent,
+                        Scorecard: row.cells[11].textContent
+                    };
+                });
+                localStorage.setItem('selectedBowlers', JSON.stringify(selectedBowlers));
+                alert('Bowlers saved!');
             }
         });
     </script>
