@@ -26,6 +26,7 @@
             padding: 20px;
             background-color: rgba(0, 0, 0, 0.7);
             border-radius: 10px;
+            position: relative; /* Required for positioning the button */
         }
 
         h1 {
@@ -71,11 +72,28 @@
         thead {
             background-color: rgba(0, 0, 0, 0.9);
         }
+
+        .save-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #28a745;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .save-btn:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
+        <button id="saveButton" class="save-btn">Save</button> <!-- Save button -->
         <h1 class="text-center">Top Wicketkeepers</h1>
         <div class="text-center mb-4">
             <button id="fetchWicketkeepers" class="btn btn-primary">Fetch Top Wicketkeepers</button>
@@ -86,6 +104,7 @@
         <table id="wicketkeepersTable" class="table table-bordered mt-4">
             <thead>
                 <tr>
+                    <th>Select</th> <!-- New column for checkboxes -->
                     <th>Player</th>
                     <th>Teams</th>
                     <th>Span</th>
@@ -119,6 +138,7 @@
                 // Populate the table
                 tableBody.innerHTML = data.map(wicketkeeper => `
                     <tr>
+                        <td><input type="checkbox" class="wicketkeeper-checkbox" /></td> <!-- Checkbox column -->
                         <td>${wicketkeeper.Player}</td>
                         <td>${wicketkeeper.Teams}</td>
                         <td>${wicketkeeper.Span}</td>
@@ -131,9 +151,26 @@
                         <td>${wicketkeeper['Dis/Inn']}</td>
                     </tr>
                 `).join('');
+                
+                // Add event listener for checkboxes
+                addCheckboxListeners();
             } catch (error) {
                 console.error('Error fetching top wicketkeepers:', error);
             }
+        }
+
+        function addCheckboxListeners() {
+            const checkboxes = document.querySelectorAll('.wicketkeeper-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    // Uncheck all checkboxes if this one is checked
+                    if (checkbox.checked) {
+                        checkboxes.forEach(cb => {
+                            if (cb !== checkbox) cb.checked = false;
+                        });
+                    }
+                });
+            });
         }
 
         // Show loading indicator and fetch data on button click

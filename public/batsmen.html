@@ -26,6 +26,7 @@
             padding: 20px;
             background-color: rgba(0, 0, 0, 0.7);
             border-radius: 10px;
+            position: relative; /* Required for positioning the button */
         }
 
         h1 {
@@ -71,11 +72,28 @@
         thead {
             background-color: rgba(0, 0, 0, 0.9);
         }
+
+        .save-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #28a745;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .save-btn:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
+        <button id="saveButton" class="save-btn">Save</button> <!-- Save button -->
         <h1 class="text-center">Top Batsmen</h1>
         <div class="text-center mb-4">
             <button id="fetchBatsmen" class="btn btn-primary">Fetch Top Batsmen</button>
@@ -86,6 +104,7 @@
         <table id="batsmenTable" class="table table-bordered mt-4">
             <thead>
                 <tr>
+                    <th>Select</th> <!-- Checkbox column header -->
                     <th>Player</th>
                     <th>Teams</th>
                     <th>Matches</th>
@@ -121,6 +140,7 @@
                 // Populate the table
                 tableBody.innerHTML = data.map(batsman => `
                     <tr>
+                        <td><input type="checkbox" class="batsman-checkbox" /></td> <!-- Checkbox -->
                         <td>${batsman.Player}</td>
                         <td>${batsman.Teams}</td>
                         <td>${batsman.Mat}</td>
@@ -135,15 +155,54 @@
                         <td>${batsman['6s']}</td>
                     </tr>
                 `).join('');
+                
+                // Add event listener for checkboxes
+                addCheckboxListeners();
             } catch (error) {
                 console.error('Error fetching top batsmen:', error);
             }
+        }
+
+        function addCheckboxListeners() {
+            const checkboxes = document.querySelectorAll('.batsman-checkbox');
+            let selectedCount = 0;
+
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    if (checkbox.checked) {
+                        selectedCount++;
+                        if (selectedCount > 6) {
+                            checkbox.checked = false; // Uncheck the checkbox
+                            alert('You can select a maximum of 6 players.');
+                        }
+                    } else {
+                        selectedCount--;
+                    }
+                });
+            });
+        }
+
+        function validateSelection() {
+            const checkboxes = document.querySelectorAll('.batsman-checkbox:checked');
+            if (checkboxes.length < 5) {
+                alert('Please select at least 5 players.');
+                return false;
+            }
+            return true;
         }
 
         // Show loading indicator and fetch data on button click
         document.getElementById('fetchBatsmen').addEventListener('click', () => {
             document.getElementById('loading').style.display = 'block';
             fetchTopBatsmen();
+        });
+
+        // Validate selection on save button click
+        document.getElementById('saveButton').addEventListener('click', () => {
+            if (validateSelection()) {
+                // Add save logic here
+                alert('Selection is valid. Save your data.');
+            }
         });
     </script>
 </body>
