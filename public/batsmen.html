@@ -16,7 +16,6 @@
             margin: 0;
             padding: 0;
             font-family: 'Playwrite AU QLD', cursive;
-            /* Ensure consistent font */
         }
 
         .container {
@@ -28,7 +27,6 @@
             background-color: rgba(0, 0, 0, 0.7);
             border-radius: 10px;
             position: relative;
-            /* Required for positioning the button */
         }
 
         h1 {
@@ -59,7 +57,6 @@
             background-color: rgba(0, 0, 0, 0.7);
             color: white;
             border-collapse: collapse;
-            /* Ensures borders are collapsed between cells */
         }
 
         th,
@@ -67,7 +64,6 @@
             text-align: center;
             padding: 10px;
             border: 1px solid #dee2e6;
-            /* Light grey border for cells */
         }
 
         th {
@@ -98,7 +94,7 @@
 
 <body>
     <div class="container">
-        <button id="saveButton" class="save-btn">Save</button> <!-- Save button -->
+        <button id="saveButton" class="save-btn">Save</button>
         <h1 class="text-center">Top Batsmen</h1>
         <div class="text-center mb-4">
             <button id="fetchBatsmen" class="btn btn-primary">Fetch Top Batsmen</button>
@@ -109,7 +105,7 @@
         <table id="batsmenTable" class="table table-bordered mt-4">
             <thead>
                 <tr>
-                    <th>Select</th> <!-- Checkbox column header -->
+                    <th>Select</th>
                     <th>Player</th>
                     <th>Teams</th>
                     <th>Matches</th>
@@ -131,7 +127,6 @@
     </div>
 
     <script>
-        // Function to fetch top batsmen and populate the table
         async function fetchBatsmen() {
             try {
                 const response = await fetch('/top-batsmen');
@@ -139,34 +134,35 @@
                 const tableBody = document.getElementById('batsmenTableBody');
                 const loadingIndicator = document.getElementById('loading');
 
-                // Clear the loading indicator
+                if (!response.ok) throw new Error('Network response was not ok.');
+
                 loadingIndicator.style.display = 'none';
-
-                // Populate the table
                 tableBody.innerHTML = data.map(batsman => `
-                    <tr>
-                        <td><input type="checkbox" class="batsman-checkbox" /></td> <!-- Checkbox -->
-                        <td>${batsman.Player}</td>
-                        <td>${batsman.Teams}</td>
-                        <td>${batsman.Matches}</td>
-                        <td>${batsman.Inns}</td>
-                        <td>${batsman.NO}</td>
-                        <td>${batsman.Runs}</td>
-                        <td>${batsman.HS}</td>
-                        <td>${batsman.Ave}</td>
-                        <td>${batsman.BF}</td>
-                        <td>${batsman.SR}</td>
-                        <td>${batsman['4s']}</td>
-                        <td>${batsman['6s']}</td>
-                    </tr>
-                `).join('');
+            <tr>
+                <td><input type="checkbox" class="batsman-checkbox" /></td>
+                <td>${batsman.Player}</td>
+                <td>${batsman.Teams}</td>
+                <td>${batsman.Mat || 'N/A'}</td> <!-- Change Matches to Mat -->
+                <td>${batsman.Inns || 'N/A'}</td>
+                <td>${batsman.NO || 'N/A'}</td>
+                <td>${batsman.Runs || 'N/A'}</td>
+                <td>${batsman.HS || 'N/A'}</td>
+                <td>${batsman.Ave || 'N/A'}</td>
+                <td>${batsman.BF || 'N/A'}</td>
+                <td>${batsman.SR || 'N/A'}</td>
+                <td>${batsman['4s'] || 'N/A'}</td>
+                <td>${batsman['6s'] || 'N/A'}</td>
+            </tr>
+        `).join('');
 
-                // Add event listener for checkboxes
                 addCheckboxListeners();
             } catch (error) {
                 console.error('Error fetching top batsmen:', error);
+                document.getElementById('loading').style.display = 'none';
+                alert('Error fetching data. Please try again.');
             }
         }
+
 
         function addCheckboxListeners() {
             const checkboxes = document.querySelectorAll('.batsman-checkbox');
@@ -174,14 +170,11 @@
 
             checkboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', () => {
-                    if (checkbox.checked) {
-                        selectedCount++;
-                        if (selectedCount > 6) {
-                            checkbox.checked = false; // Uncheck the checkbox
-                            alert('You can select a maximum of 6 players.');
-                        }
-                    } else {
+                    selectedCount += checkbox.checked ? 1 : -1;
+                    if (selectedCount > 6) {
+                        checkbox.checked = false;
                         selectedCount--;
+                        alert('You can select a maximum of 6 players.');
                     }
                 });
             });
@@ -196,13 +189,11 @@
             return true;
         }
 
-        // Show loading indicator and fetch data on button click
         document.getElementById('fetchBatsmen').addEventListener('click', () => {
             document.getElementById('loading').style.display = 'block';
             fetchBatsmen();
         });
 
-        // Save selected batsmen to localStorage
         document.getElementById('saveButton').addEventListener('click', () => {
             if (validateSelection()) {
                 const selectedBatsmen = Array.from(document.querySelectorAll('.batsman-checkbox:checked')).map(checkbox => {
