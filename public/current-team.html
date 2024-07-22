@@ -17,14 +17,10 @@
             margin: 0;
             padding: 0;
             font-family: 'Playwrite AU QLD', cursive;
-            /* Ensure consistent font */
         }
 
         .container {
             margin-top: 20px;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
             padding: 20px;
             background-color: rgba(0, 0, 0, 0.7);
             border-radius: 15px;
@@ -42,6 +38,8 @@
             background-color: rgba(0, 0, 0, 0.5);
             border-radius: 10px;
             overflow: hidden;
+            width: 100%; /* Full page width */
+            margin-bottom: 20px;
         }
 
         .table th,
@@ -65,6 +63,17 @@
         .table tbody tr:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
+
+        .logout-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .table-container {
+            overflow-x: auto; /* Add horizontal scroll if needed */
+        }
     </style>
 </head>
 
@@ -72,68 +81,76 @@
     <div class="container">
         <h1>Current Team</h1>
 
-        <h3>Batsmen</h3>
-        <table id="batsmenTable" class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Player</th>
-                    <th>Teams</th>
-                    <th>Matches</th>
-                    <th>Inns</th>
-                    <th>NO</th>
-                    <th>Runs</th>
-                    <th>HS</th>
-                    <th>Ave</th>
-                    <th>BF</th>
-                    <th>SR</th>
-                    <th>4s</th>
-                    <th>6s</th>
-                </tr>
-            </thead>
-            <tbody id="batsmenTableBody">
-                <!-- Data will be inserted here -->
-            </tbody>
-        </table>
+        <div class="table-container">
+            <h3>Batsmen</h3>
+            <table id="batsmenTable" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>Teams</th>
+                        <th>Matches</th>
+                        <th>Inns</th>
+                        <th>NO</th>
+                        <th>Runs</th>
+                        <th>HS</th>
+                        <th>Ave</th>
+                        <th>BF</th>
+                        <th>SR</th>
+                        <th>4s</th>
+                        <th>6s</th>
+                    </tr>
+                </thead>
+                <tbody id="batsmenTableBody">
+                    <!-- Data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
 
-        <h3>Bowlers</h3>
-        <table id="bowlersTable" class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Player</th>
-                    <th>Overs</th>
-                    <th>Mdns</th>
-                    <th>Runs</th>
-                    <th>Wkts</th>
-                    <th>Econ</th>
-                    <th>Team</th>
-                    <th>Opposition</th>
-                    <th>Ground</th>
-                    <th>Match Date</th>
-                    <th>Scorecard</th>
-                </tr>
-            </thead>
-            <tbody id="bowlersTableBody">
-                <!-- Data will be inserted here -->
-            </tbody>
-        </table>
+        <div class="table-container">
+            <h3>Bowlers</h3>
+            <table id="bowlersTable" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>Overs</th>
+                        <th>Mdns</th>
+                        <th>Runs</th>
+                        <th>Wkts</th>
+                        <th>Econ</th>
+                        <th>Team</th>
+                        <th>Opposition</th>
+                        <th>Ground</th>
+                        <th>Match Date</th>
+                        <th>Scorecard</th>
+                    </tr>
+                </thead>
+                <tbody id="bowlersTableBody">
+                    <!-- Data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
 
-        <h3>Wicketkeepers</h3>
-        <table id="wicketkeepersTable" class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Player</th>
-                    <th>Matches</th>
-                    <th>Inns</th>
-                    <th>Catches</th>
-                    <th>Stumpings</th>
-                    <th>Max Dis Inns</th>
-                    <th>Dis/Inn</th>
-                </tr>
-            </thead>
-            <tbody id="wicketkeepersTableBody">
-                <!-- Data will be inserted here -->
-            </tbody>
-        </table>
+        <div class="table-container">
+            <h3>Wicketkeepers</h3>
+            <table id="wicketkeepersTable" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>Matches</th>
+                        <th>Inns</th>
+                        <th>Catches</th>
+                        <th>Stumpings</th>
+                        <th>Max Dis Inns</th>
+                        <th>Dis/Inn</th>
+                    </tr>
+                </thead>
+                <tbody id="wicketkeepersTableBody">
+                    <!-- Data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+
+        <button class="btn btn-danger logout-btn" onclick="logout()">Logout</button>
     </div>
 
     <script>
@@ -199,6 +216,15 @@
     `).join('');
         }
 
+        function logout() {
+            // Clear local storage
+            localStorage.removeItem('selectedBatsmen');
+            localStorage.removeItem('selectedBowlers');
+            localStorage.removeItem('selectedWicketkeepers');
+
+            // Redirect to login page or another appropriate page
+            window.location.href = 'login.html'; // Change to your login page URL
+        }
 
         // Load data when the page loads
         window.addEventListener('DOMContentLoaded', loadSelections);
