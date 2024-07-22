@@ -35,6 +35,15 @@ h1 {
 
 .btn-primary {
     margin-top: 10px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
 }
 
 .result {
@@ -48,12 +57,39 @@ h1 {
     background-color: #e9ecef;
     border-radius: 3px;
 }
-  .table-container {
+
+.table-container {
     margin-top: 20px;
-  }
-  
-  .table-header {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #ffffff;
+    width: 100%;
+}
+
+.table-container .table {
+    margin-bottom: 0;
+    border-collapse: collapse; /* Ensures borders are collapsed between cells */
+}
+
+.table-container .table th, .table-container .table td {
+    border: 1px solid #dee2e6; /* Light grey border for cells */
+}
+
+.table-header {
     background-color: #007bff;
     color: #fff;
-  }
-  
+}
+
+.table th, .table td {
+    text-align: center;
+    padding: 8px; /* Adjust padding for spacing */
+}
+
+.table th {
+    white-space: nowrap;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
