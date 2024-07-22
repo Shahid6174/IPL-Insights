@@ -1,64 +1,73 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const path = require('path');
+const mongoose = require('mongoose');
 const app = express();
 const port = 3000;
 
-// Middleware
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
-// Serve static files from 'public' directory
-app.use(express.static(path.join(__dirname, 'public')));
+const uri = 'mongodb://localhost:27017/IPL-Insights';
+mongoose.connect(uri);
 
-// Mock data
-const teams = [
-    { team_id: 1, name: 'MI', cupsWon: 5 },
-    { team_id: 2, name: 'CSK', cupsWon: 4 },
-    { team_id: 3, name: 'RR', cupsWon: 2 },
-    { team_id: 4, name: 'RCB', cupsWon: 0 },
-    // Add more teams as needed
-];
+const db = mongoose.connection;
 
-const players = [
-    { player_id: 1, name: 'Rohit Sharma', team_id: 1 },
-    { player_id: 2, name: 'MS Dhoni', team_id: 2 },
-    { player_id: 3, name: 'Ben Stokes', team_id: 3 },
-    { player_id: 4, name: 'Virat Kohli', team_id: 4 },
-    // Add more players as needed
-];
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', () => {
+  console.log('Connected to MongoDB');
 
-// Endpoints
-app.get('/api/teams', (req, res) => {
-    res.json(teams);
-});
+  // Fetch top batsmen
+  app.get('/top-batsmen', async (req, res) => {
+    try {
+      const batsmen = await db.collection('Batsmen').find().toArray();
+      res.json(batsmen);
+    } catch (err) {
+      res.status(500).send(err.message);
+    }
+  });
 
-app.get('/api/players', (req, res) => {
-    res.json(players);
-});
+  // Fetch top bowlers
+  app.get('/top-bowlers', async (req, res) => {
+    try {
+      const bowlers = await db.collection('Bowlers').find().toArray();
+      res.json(bowlers);
+    } catch (err) {
+      res.status(500).send(err.message);
+    }
+  });
 
-app.post('/api/selections', (req, res) => {
-    // Example: Store selections (for now, just log it)
-    console.log(req.body);
-    res.status(201).send('Selections saved');
-});
+  // Fetch top wicketkeepers
+  app.get('/top-wicketkeepers', async (req, res) => {
+    try {
+      const wicketkeepers = await db.collection('WicketKeepers').find().toArray();
+      res.json(wicketkeepers);
+    } catch (err) {
+      res.status(500).send(err.message);
+    }
+  });
 
-app.get('/api/selections/:user_id', (req, res) => {
-    // Example: Retrieve user selections (mock data for now)
-    res.json({
-        batsmen: ['Player A', 'Player B'],
-        bowlers: ['Player C', 'Player D'],
-        all_rounders: ['Player E'],
-        wicketkeepers: ['Player F']
-    });
-});
+  // Save current team
+  app.post('/save-current-team', async (req, res) => {
+    try {
+      const currentTeam = req.body;
+      await db.collection('currentTeam').insertOne(currentTeam);
+      res.json({ message: 'Current team saved successfully!' });
+    } catch (err) {
+      res.status(500).send(err.message);
+    }
+  });
 
-// Root route
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
+  // Fetch current team
+  app.get('/current-team', async (req, res) => {
+    try {
+      const currentTeam = await db.collection('currentTeam').find().toArray();
+      res.json(currentTeam);
+    } catch (err) {
+      res.status(500).send(err.message);
+    }
+  });
 
-// Start the server
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+  app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+  });
 });
