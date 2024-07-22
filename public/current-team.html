@@ -38,7 +38,8 @@
             background-color: rgba(0, 0, 0, 0.5);
             border-radius: 10px;
             overflow: hidden;
-            width: 100%; /* Full page width */
+            width: 100%;
+            /* Full page width */
             margin-bottom: 20px;
         }
 
@@ -72,7 +73,8 @@
         }
 
         .table-container {
-            overflow-x: auto; /* Add horizontal scroll if needed */
+            overflow-x: auto;
+            /* Add horizontal scroll if needed */
         }
     </style>
 </head>
@@ -82,10 +84,10 @@
         <h1>Current Team</h1>
 
         <div class="table-container">
-            <h3>Batsmen</h3>
+            <h3><u>Batsmen</u></h3>
             <table id="batsmenTable" class="table table-bordered">
                 <thead>
-                    <tr>
+                    <tr style="color: #1aff00">
                         <th>Player</th>
                         <th>Teams</th>
                         <th>Matches</th>
@@ -107,10 +109,10 @@
         </div>
 
         <div class="table-container">
-            <h3>Bowlers</h3>
+            <h3><u>Bowlers</u></h3>
             <table id="bowlersTable" class="table table-bordered">
                 <thead>
-                    <tr>
+                    <tr style="color: #1aff00">
                         <th>Player</th>
                         <th>Overs</th>
                         <th>Mdns</th>
@@ -131,10 +133,10 @@
         </div>
 
         <div class="table-container">
-            <h3>Wicketkeepers</h3>
+            <h3><u>Wicketkeepers</u></h3>
             <table id="wicketkeepersTable" class="table table-bordered">
                 <thead>
-                    <tr>
+                    <tr style="color: #1aff00">
                         <th>Player</th>
                         <th>Matches</th>
                         <th>Inns</th>
@@ -150,7 +152,50 @@
             </table>
         </div>
 
-        <button class="btn btn-danger logout-btn" onclick="logout()">Logout</button>
+        <div class="table-container">
+            <h3><u>All-rounders</u></h3>
+            <table id="allroundersTable" class="table table-bordered">
+                <thead>
+                    <tr style="color: #1aff00">
+                        <th>Player</th>
+                        <th>Teams</th>
+                        <th>Matches</th>
+                        <th>Inns</th>
+                        <th>NO</th>
+                        <th>Runs</th>
+                        <th>HS</th>
+                        <th>Ave</th>
+                        <th>BF</th>
+                        <th>SR</th>
+                        <th>4s</th>
+                        <th>6s</th>
+                        <th>Overs</th>
+                        <th>Mdns</th>
+                        <th>Wkts</th>
+                        <th>Econ</th>
+                    </tr>
+                </thead>
+                <tbody id="allroundersTableBody">
+                    <!-- Data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-container">
+            <h3><u>Selected Players</u></h3>
+            <table id="unionTable" class="table table-bordered">
+                <thead>
+                    <tr style="color: #1aff00">
+                        <th>Players</th>
+                    </tr>
+                </thead>
+                <tbody id="unionTableBody">
+                    <!-- Data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+
+        <button class="btn btn-danger logout-btn" onclick="logout()">Accept & Logout</button>
     </div>
 
     <script>
@@ -166,68 +211,115 @@
             const batsmenTableBody = document.getElementById('batsmenTableBody');
             const bowlersTableBody = document.getElementById('bowlersTableBody');
             const wicketkeepersTableBody = document.getElementById('wicketkeepersTableBody');
+            const allroundersTableBody = document.getElementById('allroundersTableBody');
+            const unionTableBody = document.getElementById('unionTableBody');
 
             // Populate batsmen table
             batsmenTableBody.innerHTML = batsmen.map(batsman => `
-        <tr>
-            <td>${batsman.Player || 'N/A'}</td>
-            <td>${batsman.Teams || 'N/A'}</td>
-            <td>${batsman.Matches || 'N/A'}</td>
-            <td>${batsman.Inns || 'N/A'}</td>
-            <td>${batsman.NO || 'N/A'}</td>
-            <td>${batsman.Runs || 'N/A'}</td>
-            <td>${batsman.HS || 'N/A'}</td>
-            <td>${batsman.Ave || 'N/A'}</td>
-            <td>${batsman.BF || 'N/A'}</td>
-            <td>${batsman.SR || 'N/A'}</td>
-            <td>${batsman['4s'] || 'N/A'}</td>
-            <td>${batsman['6s'] || 'N/A'}</td>
-        </tr>
-    `).join('');
+                <tr>
+                    <td>${batsman.Player || 'N/A'}</td>
+                    <td>${batsman.Teams || 'N/A'}</td>
+                    <td>${batsman.Matches || 'N/A'}</td>
+                    <td>${batsman.Inns || 'N/A'}</td>
+                    <td>${batsman.NO || 'N/A'}</td>
+                    <td>${batsman.Runs || 'N/A'}</td>
+                    <td>${batsman.HS || 'N/A'}</td>
+                    <td>${batsman.Ave || 'N/A'}</td>
+                    <td>${batsman.BF || 'N/A'}</td>
+                    <td>${batsman.SR || 'N/A'}</td>
+                    <td>${batsman['4s'] || 'N/A'}</td>
+                    <td>${batsman['6s'] || 'N/A'}</td>
+                </tr>
+            `).join('');
 
             // Populate bowlers table
             bowlersTableBody.innerHTML = bowlers.map(bowler => `
-        <tr>
-            <td>${bowler.Player || 'N/A'}</td>
-            <td>${bowler.Overs || 'N/A'}</td>
-            <td>${bowler.Mdns || 'N/A'}</td>
-            <td>${bowler.Runs || 'N/A'}</td>
-            <td>${bowler.Wkts || 'N/A'}</td>
-            <td>${bowler.Econ || 'N/A'}</td>
-            <td>${bowler.Team || 'N/A'}</td>
-            <td>${bowler.Opposition || 'N/A'}</td>
-            <td>${bowler.Ground || 'N/A'}</td>
-            <td>${bowler['Match Date'] || 'N/A'}</td>
-            <td>${bowler.Scorecard || 'N/A'}</td>
-        </tr>
-    `).join('');
+                <tr>
+                    <td>${bowler.Player || 'N/A'}</td>
+                    <td>${bowler.Overs || 'N/A'}</td>
+                    <td>${bowler.Mdns || 'N/A'}</td>
+                    <td>${bowler.Runs || 'N/A'}</td>
+                    <td>${bowler.Wkts || 'N/A'}</td>
+                    <td>${bowler.Econ || 'N/A'}</td>
+                    <td>${bowler.Team || 'N/A'}</td>
+                    <td>${bowler.Opposition || 'N/A'}</td>
+                    <td>${bowler.Ground || 'N/A'}</td>
+                    <td>${bowler['Match Date'] || 'N/A'}</td>
+                    <td>${bowler.Scorecard || 'N/A'}</td>
+                </tr>
+            `).join('');
 
             // Populate wicketkeepers table
             wicketkeepersTableBody.innerHTML = wicketkeepers.map(wicketkeeper => `
-        <tr>
-            <td>${wicketkeeper.Player || 'N/A'}</td>
-            <td>${wicketkeeper.Mat || 'N/A'}</td>
-            <td>${wicketkeeper.Inns || 'N/A'}</td>
-            <td>${wicketkeeper.Ct || 'N/A'}</td>
-            <td>${wicketkeeper.St || 'N/A'}</td>
-            <td>${wicketkeeper['Max Dis Inns'] || 'N/A'}</td>
-            <td>${wicketkeeper['Dis/Inn'] || 'N/A'}</td>
-        </tr>
-    `).join('');
+                <tr>
+                    <td>${wicketkeeper.Player || 'N/A'}</td>
+                    <td>${wicketkeeper.Mat || 'N/A'}</td>
+                    <td>${wicketkeeper.Inns || 'N/A'}</td>
+                    <td>${wicketkeeper.Ct || 'N/A'}</td>
+                    <td>${wicketkeeper.St || 'N/A'}</td>
+                    <td>${wicketkeeper['Max Dis Inns'] || 'N/A'}</td>
+                    <td>${wicketkeeper['Dis/Inn'] || 'N/A'}</td>
+                </tr>
+            `).join('');
+
+            // Calculate and populate all-rounders table
+            const allrounders = batsmen.filter(batsman => bowlers.some(bowler => bowler.Player === batsman.Player));
+            allroundersTableBody.innerHTML = allrounders.map(allrounder => {
+                const bowlerStats = bowlers.find(bowler => bowler.Player === allrounder.Player) || {};
+                return `
+                    <tr>
+                        <td>${allrounder.Player || 'N/A'}</td>
+                        <td>${allrounder.Teams || 'N/A'}</td>
+                        <td>${allrounder.Matches || 'N/A'}</td>
+                        <td>${allrounder.Inns || 'N/A'}</td>
+                        <td>${allrounder.NO || 'N/A'}</td>
+                        <td>${allrounder.Runs || 'N/A'}</td>
+                        <td>${allrounder.HS || 'N/A'}</td>
+                        <td>${allrounder.Ave || 'N/A'}</td>
+                        <td>${allrounder.BF || 'N/A'}</td>
+                        <td>${allrounder.SR || 'N/A'}</td>
+                        <td>${allrounder['4s'] || 'N/A'}</td>
+                        <td>${allrounder['6s'] || 'N/A'}</td>
+                        <td>${bowlerStats.Overs || 'N/A'}</td>
+                        <td>${bowlerStats.Mdns || 'N/A'}</td>
+                        <td>${bowlerStats.Wkts || 'N/A'}</td>
+                        <td>${bowlerStats.Econ || 'N/A'}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Calculate and populate union of all players table
+            const allPlayerNames = new Set([
+                ...batsmen.map(player => player.Player),
+                ...bowlers.map(player => player.Player),
+                ...wicketkeepers.map(player => player.Player)
+            ]);
+
+            unionTableBody.innerHTML = Array.from(allPlayerNames).map(player => `
+                <tr>
+                    <td>${player || 'N/A'}</td>
+                </tr>
+            `).join('');
         }
 
         function logout() {
+            // Print the current page
+            window.print();
+
             // Clear local storage
             localStorage.removeItem('selectedBatsmen');
             localStorage.removeItem('selectedBowlers');
             localStorage.removeItem('selectedWicketkeepers');
 
-            // Redirect to login page or another appropriate page
-            window.location.href = 'login.html'; // Change to your login page URL
+            // Redirect to the index page or another appropriate page
+            setTimeout(() => {
+                window.location.href = 'index.html'; // Change to your login page URL
+            }, 1000); // Delay to allow the print dialog to open
         }
 
-        // Load data when the page loads
-        window.addEventListener('DOMContentLoaded', loadSelections);
+
+        // Load selections on page load
+        window.onload = loadSelections;
     </script>
 </body>
 
