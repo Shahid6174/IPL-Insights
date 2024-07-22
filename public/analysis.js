@@ -3,16 +3,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const analysisResultsDiv = document.getElementById('analysisResults');
 
     const teams = [
-        { name: 'RR', cupsWon: 2, players: ['Sanju Samson', 'Jos Buttler', 'Riyan Parag', 'Shimron Hetmyer', 'Yashasvi Jaiswal'] },
-        { name: 'MI', cupsWon: 5, players: ['Rohit Sharma', 'Jasprit Bumrah', 'Kieron Pollard', 'Ishan Kishan', 'Suryakumar Yadav'] },
-        { name: 'LSG', cupsWon: 0, players: ['KL Rahul', 'Quinton de Kock', 'Deepak Hooda', 'Ravi Bishnoi', 'Krunal Pandya'] },
-        { name: 'SRH', cupsWon: 2, players: ['David Warner', 'Kane Williamson', 'Rashid Khan', 'Bhuvneshwar Kumar', 'Abhishek Sharma'] },
-        { name: 'CSK', cupsWon: 5, players: ['MS Dhoni', 'Ruturaj Gaikwad', 'Ben Stokes', 'Ravindra Jadeja', 'Deepak Chahar'] },
-        { name: 'PK', cupsWon: 0, players: ['Shubman Gill', 'Kagiso Rabada', 'Mohammed Shami', 'Prabhsimran Singh', 'Rahul Chahar'] },
-        { name: 'GT', cupsWon: 1, players: ['Hardik Pandya', 'Rashid Khan', 'Shubman Gill', 'David Miller', 'Mohammad Shami'] },
+        { name: 'RR', cupsWon: 1, players: ['Sanju Samson', 'Jos Buttler', 'Riyan Parag', 'Shimron Hetmyer', 'Yashasvi Jaiswal'] },
+        { name: 'MI', cupsWon: 5, players: ['Rohit Sharma', 'Jasprit Bumrah', 'Suryakumar Yadav', 'Ishan Kishan', 'Tilak Varma'] },
+        { name: 'LSG', cupsWon: 0, players: ['KL Rahul', 'Quinton de Kock', 'Marcus Stoinis', 'Krunal Pandya', 'Ravi Bishnoi'] },
+        { name: 'SRH', cupsWon: 1, players: ['Aiden Markram', 'Rahul Tripathi', 'Abhishek Sharma', 'Bhuvneshwar Kumar', 'Umran Malik'] },
+        { name: 'CSK', cupsWon: 5, players: ['MS Dhoni', 'Ruturaj Gaikwad', 'Ravindra Jadeja', 'Deepak Chahar', 'Ben Stokes'] },
+        { name: 'PK', cupsWon: 0, players: ['Shikhar Dhawan', 'Kagiso Rabada', 'Arshdeep Singh', 'Sam Curran', 'Liam Livingstone'] },
+        { name: 'GT', cupsWon: 1, players: ['Hardik Pandya', 'Shubman Gill', 'Rashid Khan', 'David Miller', 'Mohammad Shami'] },
         { name: 'KKR', cupsWon: 3, players: ['Shreyas Iyer', 'Andre Russell', 'Sunil Narine', 'Nitish Rana', 'Rinku Singh'] },
         { name: 'RCB', cupsWon: 0, players: ['Virat Kohli', 'Faf du Plessis', 'Glenn Maxwell', 'Mohammed Siraj', 'Harshal Patel'] },
-        { name: 'DC', cupsWon: 0, players: ['Rishabh Pant', 'Prithvi Shaw', 'Kagiso Rabada', 'Axar Patel', 'Mitchell Marsh'] }
+        { name: 'DC', cupsWon: 0, players: ['Rishabh Pant', 'Prithvi Shaw', 'Anrich Nortje', 'Axar Patel', 'Mitchell Marsh'] }
     ];
     
 

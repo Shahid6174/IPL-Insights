@@ -1,97 +1,202 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const fetchBatsmenButton = document.getElementById('fetchBatsmen');
-    const fetchBowlersButton = document.getElementById('fetchBowlers');
-    const fetchAllRoundersButton = document.getElementById('fetchAllRounders');
-    const fetchWicketkeepersButton = document.getElementById('fetchWicketkeepers');
-    const saveSelectionsButton = document.getElementById('saveSelections');
+// URL base for API requests
+const apiBaseUrl = '/api';
 
+// Function to fetch teams from the backend
+function fetchTeams() {
+    fetch(`${apiBaseUrl}/teams`)
+        .then(response => response.json())
+        .then(data => {
+            populateDropdowns(data, 'team');
+        })
+        .catch(error => console.error('Error fetching teams:', error));
+}
+
+// Function to fetch players from the backend
+function fetchPlayers() {
+    fetch(`${apiBaseUrl}/players`)
+        .then(response => response.json())
+        .then(data => {
+            populateDropdowns(data, 'player');
+        })
+        .catch(error => console.error('Error fetching players:', error));
+}
+
+// Function to populate dropdowns with data
+function populateDropdowns(data, type) {
+    const dropdowns = document.querySelectorAll(`select[data-type="${type}"]`);
+    dropdowns.forEach(dropdown => {
+        dropdown.innerHTML = '<option value="">Select...</option>';
+        data.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.name || item.player_id;  // Adjust as needed
+            option.textContent = item.name || item.name;
+            dropdown.appendChild(option);
+        });
+    });
+}
+
+// Function to handle form submission for selections
+function submitSelections() {
+    const selections = {
+        batsmen: getSelectedValues('batsman'),
+        bowlers: getSelectedValues('bowler'),
+        all_rounders: getSelectedValues('all_rounder'),
+        wicketkeepers: getSelectedValues('wicketkeeper')
+    };
+
+    fetch(`${apiBaseUrl}/selections`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(selections)
+    })
+    .then(response => response.text())
+    .then(message => {
+        console.log('Selection submitted:', message);
+        alert('Selections submitted successfully!');
+    })
+    .catch(error => console.error('Error submitting selections:', error));
+}
+
+// Function to get selected values from a dropdown or input
+function getSelectedValues(type) {
+    const selectedOptions = Array.from(document.querySelectorAll(`select[data-type="${type}"] option:checked`));
+    return selectedOptions.map(option => option.value);
+}
+
+// Function to handle Batsmen Page
+function handleBatsmenPage() {
     const numBatsmenInput = document.getElementById('numBatsmen');
+    const fetchBatsmenButton = document.getElementById('fetchBatsmen');
+
+    fetchTeams();  // Populate team dropdowns
+
+    fetchBatsmenButton.addEventListener('click', () => {
+        const numBatsmen = parseInt(numBatsmenInput.value, 10);
+        if (numBatsmen >= 3 && numBatsmen <= 5) {
+            // Add your logic to fetch and display batsmen
+            console.log(`Fetching top ${numBatsmen} batsmen...`);
+        } else {
+            alert('Please enter a number between 3 and 5.');
+        }
+    });
+}
+
+// Function to handle Bowlers Page
+function handleBowlersPage() {
     const numBowlersInput = document.getElementById('numBowlers');
+    const fetchBowlersButton = document.getElementById('fetchBowlers');
+
+    fetchTeams();  // Populate team dropdowns
+    populateDropdowns([{ name: 'Wankhede' }, { name: 'Jaipur' }, { name: 'Bengaluru' }, /* Add more grounds */], 'ground');
+
+    fetchBowlersButton.addEventListener('click', () => {
+        const numBowlers = parseInt(numBowlersInput.value, 10);
+        if (numBowlers >= 3 && numBowlers <= 4) {
+            // Add your logic to fetch and display bowlers
+            console.log(`Fetching top ${numBowlers} bowlers...`);
+        } else {
+            alert('Please enter a number between 3 and 4.');
+        }
+    });
+}
+
+// Function to handle All-Rounders and Wicketkeepers Page
+function handleAllRoundersAndWicketkeepersPage() {
     const numAllRoundersInput = document.getElementById('numAllRounders');
+    const fetchAllRoundersButton = document.getElementById('fetchAllRounders');
     const numWicketkeepersInput = document.getElementById('numWicketkeepers');
+    const fetchWicketkeepersButton = document.getElementById('fetchWicketkeepers');
 
-    const teamSelectBatsmen = document.getElementById('teamSelectBatsmen');
-    const groundSelectBowlers = document.getElementById('groundSelectBowlers');
-    const teamSelectAllRounders = document.getElementById('teamSelectAllRounders');
-    const teamSelectWicketkeepers = document.getElementById('teamSelectWicketkeepers');
+    fetchTeams();  // Populate team dropdowns
 
-    const resultBatsmen = document.getElementById('resultBatsmen');
-    const resultBowlers = document.getElementById('resultBowlers');
-    const resultAllRounders = document.getElementById('resultAllRounders');
-    const resultWicketkeepers = document.getElementById('resultWicketkeepers');
-
-    const teams = [
-        { name: 'RR', cupsWon: 2, players: ['Sanju Samson', 'Jos Buttler', 'Riyan Parag', 'Shimron Hetmyer', 'Yashasvi Jaiswal'] },
-        { name: 'MI', cupsWon: 5, players: ['Rohit Sharma', 'Jasprit Bumrah', 'Kieron Pollard', 'Ishan Kishan', 'Suryakumar Yadav'] },
-        { name: 'LSG', cupsWon: 0, players: ['KL Rahul', 'Quinton de Kock', 'Deepak Hooda', 'Ravi Bishnoi', 'Krunal Pandya'] },
-        { name: 'SRH', cupsWon: 2, players: ['David Warner', 'Kane Williamson', 'Rashid Khan', 'Bhuvneshwar Kumar', 'Abhishek Sharma'] },
-        { name: 'CSK', cupsWon: 5, players: ['MS Dhoni', 'Ruturaj Gaikwad', 'Ben Stokes', 'Ravindra Jadeja', 'Deepak Chahar'] },
-        { name: 'PK', cupsWon: 1, players: ['Shubman Gill', 'Kagiso Rabada', 'Mohammed Shami', 'Prabhsimran Singh', 'Rahul Chahar'] },
-        { name: 'GT', cupsWon: 1, players: ['Hardik Pandya', 'Rashid Khan', 'Shubman Gill', 'David Miller', 'Mohammad Shami'] },
-        { name: 'KKR', cupsWon: 2, players: ['Shreyas Iyer', 'Andre Russell', 'Sunil Narine', 'Nitish Rana', 'Rinku Singh'] },
-        { name: 'RCB', cupsWon: 0, players: ['Virat Kohli', 'Faf du Plessis', 'Glenn Maxwell', 'Mohammed Siraj', 'Harshal Patel'] },
-        { name: 'DC', cupsWon: 0, players: ['Rishabh Pant', 'Prithvi Shaw', 'Kagiso Rabada', 'Axar Patel', 'Mitchell Marsh'] }
-    ];
-
-    function getSelectedPlayers(type, count) {
-        const players = [];
-        for (let i = 0; i < count; i++) {
-            const selectedPlayer = prompt(`Enter ${type} player ${i + 1}`);
-            if (selectedPlayer) players.push(selectedPlayer);
+    fetchAllRoundersButton.addEventListener('click', () => {
+        const numAllRounders = parseInt(numAllRoundersInput.value, 10);
+        if (numAllRounders >= 2 && numAllRounders <= 3) {
+            // Add your logic to fetch and display all-rounders
+            console.log(`Fetching top ${numAllRounders} all-rounders...`);
+        } else {
+            alert('Please enter a number between 2 and 3.');
         }
-        return players;
+    });
+
+    fetchWicketkeepersButton.addEventListener('click', () => {
+        const numWicketkeepers = parseInt(numWicketkeepersInput.value, 10);
+        if (numWicketkeepers === 1) {
+            // Add your logic to fetch and display wicketkeepers
+            console.log('Fetching top wicketkeeper...');
+        } else {
+            alert('Please enter the number 1.');
+        }
+    });
+}
+
+// Function to handle Analysis Page
+function handleAnalysisPage() {
+    fetch(`${apiBaseUrl}/teams`)
+        .then(response => response.json())
+        .then(teams => {
+            const container = document.getElementById('analysisContainer');
+            container.innerHTML = '';
+
+            teams.forEach(team => {
+                const teamDiv = document.createElement('div');
+                teamDiv.classList.add('team');
+                teamDiv.innerHTML = `
+                    <h2>${team.name}</h2>
+                    <p><strong>Cups Won:</strong> ${team.cupsWon}</p>
+                    <p><strong>Players:</strong> ${team.players.join(', ')}</p>
+                `;
+                container.appendChild(teamDiv);
+            });
+        })
+        .catch(error => console.error('Error fetching team analysis:', error));
+}
+
+// Function to handle Current Team Page
+function handleCurrentTeamPage() {
+    fetch(`${apiBaseUrl}/selections`)
+        .then(response => response.json())
+        .then(selections => {
+            const container = document.getElementById('currentTeamContainer');
+            container.innerHTML = '';
+
+            Object.keys(selections).forEach(category => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.classList.add('category');
+                categoryDiv.innerHTML = `
+                    <h2>${capitalizeFirstLetter(category)}</h2>
+                    <ul>
+                        ${selections[category].map(player => `<li>${player}</li>`).join('')}
+                    </ul>
+                `;
+                container.appendChild(categoryDiv);
+            });
+        })
+        .catch(error => console.error('Error fetching current team selections:', error));
+}
+
+// Capitalize the first letter of a string
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+// Determine which page to handle
+document.addEventListener('DOMContentLoaded', () => {
+    const page = document.body.getAttribute('data-page');
+
+    if (page === 'batsmen') {
+        handleBatsmenPage();
+    } else if (page === 'bowlers') {
+        handleBowlersPage();
+    } else if (page === 'all-rounders') {
+        handleAllRoundersAndWicketkeepersPage();
+    } else if (page === 'wicketkeepers') {
+        handleAllRoundersAndWicketkeepersPage();
+    } else if (page === 'analysis') {
+        handleAnalysisPage();
+    } else if (page === 'current-team') {
+        handleCurrentTeamPage();
     }
-
-    function saveSelections() {
-        const batsmen = numBatsmenInput.value;
-        const bowlers = numBowlersInput.value;
-        const allRounders = numAllRoundersInput.value;
-        const wicketkeepers = numWicketkeepersInput.value;
-
-        const selectedBatsmen = getSelectedPlayers('batsman', batsmen);
-        const selectedBowlers = getSelectedPlayers('bowler', bowlers);
-        const selectedAllRounders = getSelectedPlayers('all-rounder', allRounders);
-        const selectedWicketkeepers = getSelectedPlayers('wicketkeeper', wicketkeepers);
-
-        localStorage.setItem('selectedBatsmen', JSON.stringify(selectedBatsmen));
-        localStorage.setItem('selectedBowlers', JSON.stringify(selectedBowlers));
-        localStorage.setItem('selectedAllRounders', JSON.stringify(selectedAllRounders));
-        localStorage.setItem('selectedWicketkeepers', JSON.stringify(selectedWicketkeepers));
-        
-        alert('Selections saved successfully!');
-    }
-
-    fetchBatsmenButton.addEventListener('click', function () {
-        const numberOfBatsmen = parseInt(numBatsmenInput.value, 10);
-        if (numberOfBatsmen >= 3 && numberOfBatsmen <= 5) {
-            // Logic to fetch and display batsmen based on user input
-            resultBatsmen.innerHTML = `Displaying ${numberOfBatsmen} batsmen...`;
-        }
-    });
-
-    fetchBowlersButton.addEventListener('click', function () {
-        const numberOfBowlers = parseInt(numBowlersInput.value, 10);
-        if (numberOfBowlers >= 3 && numberOfBowlers <= 4) {
-            // Logic to fetch and display bowlers based on user input
-            resultBowlers.innerHTML = `Displaying ${numberOfBowlers} bowlers...`;
-        }
-    });
-
-    fetchAllRoundersButton.addEventListener('click', function () {
-        const numberOfAllRounders = parseInt(numAllRoundersInput.value, 10);
-        if (numberOfAllRounders >= 2 && numberOfAllRounders <= 3) {
-            // Logic to fetch and display all-rounders based on user input
-            resultAllRounders.innerHTML = `Displaying ${numberOfAllRounders} all-rounders...`;
-        }
-    });
-
-    fetchWicketkeepersButton.addEventListener('click', function () {
-        const numberOfWicketkeepers = parseInt(numWicketkeepersInput.value, 10);
-        if (numberOfWicketkeepers === 1) {
-            // Logic to fetch and display wicketkeepers based on user input
-            resultWicketkeepers.innerHTML = `Displaying ${numberOfWicketkeepers} wicketkeeper...`;
-        }
-    });
-
-    saveSelectionsButton.addEventListener('click', saveSelections);
 });
