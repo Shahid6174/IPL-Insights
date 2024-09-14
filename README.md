@@ -17,5 +17,27 @@
 ## Installation
 
 1. Clone this repository:
-   ```bash
+   ```
    git clone https://github.com/Shahid6174/IPL-Insights.git
+   ```
+2. Navigate into the project directory:
+   ```
+   cd IPL-Insights
+   ```
+3. Install the required dependencies:
+   ```
+   npm install
+   ```
+4. Start the server:
+```
+node server.js
+```
+5. Open your browser and navigate to:
+```
+http://localhost:3000
+```
+Feel free to make any additional adjustments based on your project requirements.
+
+
+
+
