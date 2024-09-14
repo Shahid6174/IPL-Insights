@@ -19,33 +19,3 @@
 1. Clone this repository:
    ```bash
    git clone https://github.com/Shahid6174/IPL-Insights.git
-
-Here's the continuation and completion of your README:
-
-markdown
-Copy code
-## Installation
-
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/Shahid6174/IPL-Insights.git
-2. Navigate into the project directory:
-```bash
-  cd IPL-Insights
-```bash
-
-Install the required dependencies:
-
-bash
-Copy code
-npm install
-Start the server:
-
-bash
-Copy code
-node server.js
-Open your browser and navigate to:
-
-arduino
-Copy code
-http://localhost:3000
