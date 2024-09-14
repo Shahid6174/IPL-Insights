@@ -29,13 +29,13 @@
    npm install
    ```
 4. Start the server:
-```
-node server.js
-```
+   ```
+   node server.js
+   ```
 5. Open your browser and navigate to:
-```
-http://localhost:3000
-```
+   ```
+   http://localhost:3000
+   ```
 Feel free to make any additional adjustments based on your project requirements.
 
 
